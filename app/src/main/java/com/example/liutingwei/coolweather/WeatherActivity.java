@@ -75,7 +75,7 @@ public class WeatherActivity extends AppCompatActivity {
             View decorView=getWindow().getDecorView();
             decorView.setSystemUiVisibility(
                     View.SYSTEM_UI_FLAG_FULLSCREEN|View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
-            getWindow().setStatusBarColor(Color.TRANSPARENT);
+            getWindow().setStatusBarColor(Color.BLACK);
         }
         setContentView(R.layout.activity_weather);
         //初始化各控件
@@ -103,8 +103,8 @@ public class WeatherActivity extends AppCompatActivity {
         });
         SharedPreferences prefs= PreferenceManager.getDefaultSharedPreferences(this);
         String weatherString=prefs.getString("weather",null);
-        if (weatherString!=null){
-            Weather weather= Utility.handlerWeatherResponse(weatherString);
+        if (weatherString !=null){
+            Weather weather= Utility.handleWeatherResponse(weatherString);
             mWeatherId=weather.basic.weatherId;
             showWeatherInfo(weather);
         }else {
@@ -112,7 +112,8 @@ public class WeatherActivity extends AppCompatActivity {
             weatherLayout.setVisibility(View.INVISIBLE);
             requestWeather(mWeatherId);
         }
-        swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener(){
+        swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.
+                OnRefreshListener(){
             @Override
             public void onRefresh(){
                 requestWeather(mWeatherId);
@@ -144,7 +145,7 @@ public class WeatherActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 final String responseText=response.body().string();
-                final Weather weather=Utility.handlerWeatherResponse(responseText);
+                final Weather weather=Utility.handleWeatherResponse(responseText);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -189,7 +190,7 @@ public class WeatherActivity extends AppCompatActivity {
     }
     private void showWeatherInfo(Weather weather){
         String cityName=weather.basic.cityName;
-        String updateTime=weather.basic.update.updateTime.split("")[1];
+        String updateTime=weather.basic.update.updateTime.split(" ")[1];
         String degree=weather.now.temperature+"!";
         String weatherInfo=weather.now.more.info;
         titleCity.setText(cityName);
